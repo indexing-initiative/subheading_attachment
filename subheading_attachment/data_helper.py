@@ -95,7 +95,7 @@ def load_pickled_object(path):
 
 class DatabaseGenerator(tensorflow.keras.utils.Sequence):
 
-    def __init__(self, db_config, pp_config, sp_processor, label_id_mapping, db_ids, batch_size, max_examples = 1000000000):
+    def __init__(self, db_config, pp_config, sp_processor, label_id_mapping, db_ids, batch_size, max_examples):
         self._db_config = db_config
         self._pp_config = pp_config
         self._sp_processor = sp_processor
@@ -148,9 +148,9 @@ class DatabaseGenerator(tensorflow.keras.utils.Sequence):
 
     def _create_outputs(self, y_data):
         if self._label_id_mapping is not None:
-            label_ids = [[self._label_id_mapping[label_id] for label_id in label_ids if label_id in self._label_id_mapping] 
+            y_data = [[self._label_id_mapping[label_id] for label_id in label_ids if label_id in self._label_id_mapping] 
                          for label_ids in y_data]
-        padded_label_ids = pad_sequences(label_ids, 
+        padded_label_ids = pad_sequences(y_data, 
                                          maxlen=self._pp_config.max_labels, 
                                          dtype='int32', 
                                          padding='post', 
@@ -183,7 +183,7 @@ class DatabaseGenerator(tensorflow.keras.utils.Sequence):
                     journal_id = 0
                 inputs_lookup[id] = (title, abstract, pub_year, year_completed, journal_id)
         ordered_inputs = [inputs_lookup[db_id] for db_id in db_ids]
-        return zip(*ordered_inputs)
+        return list(zip(*ordered_inputs))
 
     def _get_sample_indices(self, citation_count, example_count):
          s_idxs = list(range(example_count))
@@ -259,8 +259,8 @@ class MainheadingDatabaseGenerator(DatabaseGenerator):
 
 class SubheadingDatabaseGenerator(DatabaseGenerator):
     
-    def __init__(self, max_avg_desc_per_citation=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, db_config, pp_config, sp_processor, label_id_mapping, db_ids, batch_size, max_examples, max_avg_desc_per_citation=None):
+        super().__init__(db_config, pp_config, sp_processor, label_id_mapping, db_ids, batch_size, max_examples)
         self._apply_max_avg_desc_per_citation = max_avg_desc_per_citation is not None
         self._max_avg_desc_per_citation = max_avg_desc_per_citation
       
@@ -304,7 +304,7 @@ class SubheadingDatabaseGenerator(DatabaseGenerator):
                                         data['year_completed'], 
                                         data['journal_id'], 
                                         desc_id))
-        return zip(*ordered_inputs)
+        return list(zip(*ordered_inputs))
 
     def _get_sample_indices(self, citation_count, example_count):
         s_idxs = super()._get_sample_indices(citation_count, example_count)

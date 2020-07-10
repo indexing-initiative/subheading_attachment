@@ -122,8 +122,7 @@ class _ModelConfig(_ConfigBase):
         self.dropout_rate = 0.25
 
         self.output_layer_act = 'sigmoid'
-        self.output_layer_size = self._pp_config.num_labels 
-        
+
         self.init_threshold = 0.325
         self.init_learning_rate = 0.001
 
@@ -164,6 +163,10 @@ class _ModelConfig(_ConfigBase):
     @property
     def num_year_completed_time_periods(self):
         return self._pp_config.num_year_completed_time_periods
+
+    @property
+    def output_layer_size(self):
+        return self._pp_config.num_labels
 
     @property
     def num_desc(self):
