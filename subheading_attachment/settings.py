@@ -59,7 +59,7 @@ class _CrossValidationConfig(_TextConfig):
         self.dev_limit = machine_config.dev_limit
         self.dev_set_ids_path = os.path.join(machine_config.data_dir,   'preprocessed/cross-validation/group_8_target_dev_set_2018-2019.txt')
         self.train_limit = machine_config.train_limit
-        self.train_set_ids_path = os.path.join(machine_config.data_dir, 'preprocessed/cross-validation/group_8_train_set_2015-2019.txt')
+        self.train_set_ids_path = os.path.join(machine_config.data_dir, 'preprocessed/cross-validation/group_8_train_set_{}-2019.txt')
       
        
 class _CsvLoggerConfig(_TextConfig):
@@ -79,9 +79,9 @@ class _DatabaseConfig(_ConfigBase):
                         'password': '****', 
                         'charset': 'utf8mb4', 
                         'collation': 'utf8mb4_unicode_ci', 
-                        'use_unicode': True, }
-        self.config['host'] = machine_config.database_host
-        self.config['port'] = machine_config.database_port
+                        'use_unicode': True,
+                        'host':  machine_config.database_host,
+                        'port':  machine_config.database_port,}
 
 
 class _EarlyStoppingConfig(_ConfigBase):
@@ -113,16 +113,18 @@ class _ModelConfig(_ConfigBase):
         self.pub_year_dropout_rate = 0.
         self.year_completed_dropout_rate = 0.
 
+        self.has_desc_input = False
+
         self.num_hidden_layers = 1
         self.hidden_layer_size = 2048
         self.hidden_layer_act = 'relu'
 
-        self.dropout_rate = 0.5
+        self.dropout_rate = 0.25
 
         self.output_layer_act = 'sigmoid'
         self.output_layer_size = self._pp_config.num_labels 
         
-        self.init_threshold = 0.35
+        self.init_threshold = 0.325
         self.init_learning_rate = 0.001
 
     @property
@@ -172,13 +174,14 @@ class _PreprocessingConfig(_ConfigBase):
     def _initialize(self, machine_config):
 
         self.sentencepiece_model_path = os.path.join(machine_config.data_dir, 'preprocessed/word-embedding/bpe_64000_lc_cross_val_8_2015-2019.model')
+        self.critical_mesh_topic_mapping_mapping_path = os.path.join(machine_config.data_dir, 'preprocessed/label-mapping/critical_mesh_topic_mapping_v2.pkl')
         self.unknown_index = 1
         self.padding_index = 0
         self.title_max_words = 64
         self.abstract_max_words = 448
         self.max_labels = 77
         self.num_desc = 29351
-        self.num_labels = 17
+        self.num_labels = 122542
         self.vocab_size = 64000
         self.min_year_completed = 1965
         self.max_year_completed = 2018
@@ -186,23 +189,6 @@ class _PreprocessingConfig(_ConfigBase):
         self.min_pub_year = 1902
         self.max_pub_year = 2019
         self.num_pub_year_time_periods = 1 + self.max_pub_year - self.min_pub_year
-        self.label_id_mapping = { 5:1,# 'adverse effects'
-                                  15:2,# 'chemically induced'
-                                  17:3,# 'complications'
-                                  21:4,# 'diagnosis'
-                                  2:5,# 'diagnostic imaging'
-                                  24:6,# 'drug therapy'
-                                  45:7,# 'epidemiology'
-                                  30:8,# 'etiology'
-                                  31:9,# 'genetics'
-                                  51:10,# 'pharmacology'
-                                  55:11,# 'prevention & control'
-                                  58:12,# 'radiotherapy'
-                                  63:13,# 'surgery'
-                                  64:14,# 'therapeutic use'
-                                  65:15,# 'therapy'
-                                  66:16,# 'toxicity'
-                                  72:17,}# 'veterinary'
 
       
 class _ProcessingConfig(_ConfigBase):

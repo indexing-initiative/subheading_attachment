@@ -60,7 +60,13 @@ class Model:
    
         desc_input = Input(shape=(model_config.num_desc,), name='desc_input')
 
-        hidden = Concatenate()([title_features, abstract_features, pub_year, year_completed, journal_embedding, desc_input])
+        inputs = [title_input, abstract_input, pub_year_input, year_completed_input, journal_input]
+        features = [title_features, abstract_features, pub_year, year_completed, journal_embedding]
+        if model_config.has_desc_input:
+            inputs.append(desc_input)
+            features.append(desc_input)
+
+        hidden = Concatenate()(features)
         for layer_size in model_config.hidden_layer_sizes:
             hidden = Dense(layer_size, activation=None, use_bias=False)(hidden)
             hidden = BatchNormalization()(hidden)
@@ -68,9 +74,8 @@ class Model:
             hidden = Dropout(model_config.dropout_rate)(hidden)
 
         output = Dense(model_config.output_layer_size, activation=model_config.output_layer_act, name='labels')(hidden)
- 
-        model = tensorflow.keras.models.Model(inputs=[title_input, abstract_input, pub_year_input, year_completed_input, journal_input, desc_input], 
-                                              outputs=[output]) 
+
+        model = tensorflow.keras.models.Model(inputs=inputs, outputs=[output]) 
 
         loss = binary_crossentropy
         optimizer = Adam(lr=model_config.init_learning_rate)
@@ -168,7 +173,7 @@ class Model:
 
         return best_epoch_logs
 
-        def _create_conv_layers(self, model_config):
+    def _create_conv_layers(self, model_config):
         conv_layers = []
         for filter_size in model_config.conv_filter_sizes:
             conv_layer = Conv1D(model_config.conv_num_filters, filter_size, activation=None, padding='valid', strides=1, use_bias=False)
