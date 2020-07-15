@@ -57,9 +57,9 @@ class _CrossValidationConfig(_TextConfig):
         super()._initialize(machine_config)
 
         self.dev_limit = machine_config.dev_limit
-        self.dev_set_ids_path = os.path.join(machine_config.data_dir,   'preprocessed/cross-validation/dev_set_db_ids.txt')
+        self.dev_set_ids_path = os.path.join(machine_config.data_dir, 'dev_set_db_ids.txt')
         self.train_limit = machine_config.train_limit
-        self.train_set_ids_path = os.path.join(machine_config.data_dir, 'preprocessed/cross-validation/{}.txt')
+        self.train_set_ids_path = None
       
        
 class _CsvLoggerConfig(_TextConfig):
@@ -176,8 +176,8 @@ class _ModelConfig(_ConfigBase):
 class _PreprocessingConfig(_ConfigBase):
     def _initialize(self, machine_config):
 
-        self.sentencepiece_model_path = os.path.join(machine_config.data_dir, 'preprocessed/word-embedding/bpe_64000_lc.model')
-        self.label_id_mapping_path = os.path.join(machine_config.data_dir, 'preprocessed/label-mapping/{}_id_mapping.pkl')
+        self.sentencepiece_model_path = os.path.join(machine_config.data_dir, 'bpe_64000_lc.model')
+        self.label_id_mapping_path = None
         self.unknown_index = 1
         self.padding_index = 0
         self.title_max_words = 64

@@ -18,32 +18,31 @@ def get_config(model_type):
 
     dropout_rate = None
     has_desc_input = False
-    label_id_mapping_path_template = config.preprocessing.label_id_mapping_path
+    label_id_mapping_filename = None
     num_labels = None
-    train_set_filename = 'train_set_db_ids'
+    train_set_filename = 'train_set_db_ids.txt'
    
     if model_type == 'end_to_end':
         dropout_rate = 0.25
-        label_id_mapping_path = label_id_mapping_path_template.format('mesh_topic')
+        label_id_mapping_filename  = 'mesh_topic_id_mapping.pkl'
         num_labels = 122542
     elif model_type == 'mainheading':
         dropout_rate = 0.05
-        label_id_mapping_path = None
         num_labels = 29351
     elif model_type == 'subheading':
         dropout_rate = 0.5
         has_desc_input = True
-        label_id_mapping_path = label_id_mapping_path_template.format('mesh_qualifier')
+        label_id_mapping_filename  = 'mesh_qualifier_id_mapping.pkl'
         num_labels = 17
-        train_set_filename = 'train_recent_subset_db_ids'
+        train_set_filename = 'train_recent_subset_db_ids.txt'
     else:
         raise ValueError(f'model_type, {model_type}, not recognised.')
 
     config.model.dropout_rate = dropout_rate
-    config.preprocessing.label_id_mapping_path = label_id_mapping_path
+    config.preprocessing.label_id_mapping_path = os.path.join(config.data_dir, label_id_mapping_filename) if label_id_mapping_filename else None
     config.preprocessing.num_labels = num_labels
     config.model.has_desc_input = has_desc_input
-    config.cross_val.train_set_ids_path = config.cross_val.train_set_ids_path.format(train_set_filename)
+    config.cross_val.train_set_ids_path = os.path.join(config.data_dir, train_set_filename)
 
     return config
 
@@ -53,10 +52,7 @@ def get_generators(config, model_type):
     db_config = config.database
     pp_config = config.preprocessing
     sp_processor = data_helper.create_sp_processor(config.preprocessing.sentencepiece_model_path)
-    label_id_mapping_path = pp_config.label_id_mapping_path
-    label_id_mapping = None
-    if label_id_mapping_path:
-        label_id_mapping = data_helper.load_pickled_object(label_id_mapping_path)
+    label_id_mapping = data_helper.load_pickled_object(pp_config.label_id_mapping_path) if pp_config.label_id_mapping_path else None
     train_set_ids, dev_set_ids = data_helper.load_cross_validation_ids(config.cross_val)
     train_batch_size = config.train.batch_size
     train_limit = config.train.train_limit
