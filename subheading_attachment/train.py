@@ -38,7 +38,7 @@ def get_config(model_type):
     dropout_rate = None
     has_desc_input = False
     num_labels = None
-    train_set_start_year = 2004
+    train_set_filename = 'train_set_db_ids'
 
     if model_type == 'end_to_end':
         dropout_rate = 0.25
@@ -50,14 +50,14 @@ def get_config(model_type):
         dropout_rate = 0.5
         has_desc_input = True
         num_labels = 17
-        train_set_start_year = 2015
+        train_set_filename = 'train_recent_subset_db_ids'
     else:
         raise ValueError(f'model_type, {model_type}, not recognised.')
 
     config.model.dropout_rate = dropout_rate
     config.preprocessing.num_labels = num_labels
     config.model.has_desc_input = has_desc_input
-    config.cross_val.train_set_ids_path = config.cross_val.train_set_ids_path.format(train_set_start_year)
+    config.cross_val.train_set_ids_path = config.cross_val.train_set_ids_path.format(train_set_filename)
 
     return config
 

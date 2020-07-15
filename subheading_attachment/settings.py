@@ -57,9 +57,9 @@ class _CrossValidationConfig(_TextConfig):
         super()._initialize(machine_config)
 
         self.dev_limit = machine_config.dev_limit
-        self.dev_set_ids_path = os.path.join(machine_config.data_dir,   'preprocessed/cross-validation/group_8_target_dev_set_2018-2019.txt')
+        self.dev_set_ids_path = os.path.join(machine_config.data_dir,   'preprocessed/cross-validation/dev_set_db_ids.txt')
         self.train_limit = machine_config.train_limit
-        self.train_set_ids_path = os.path.join(machine_config.data_dir, 'preprocessed/cross-validation/group_8_train_set_{}-2019.txt')
+        self.train_set_ids_path = os.path.join(machine_config.data_dir, 'preprocessed/cross-validation/{}.txt')
       
        
 class _CsvLoggerConfig(_TextConfig):
