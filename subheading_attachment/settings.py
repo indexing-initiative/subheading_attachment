@@ -176,7 +176,7 @@ class _ModelConfig(_ConfigBase):
 class _PreprocessingConfig(_ConfigBase):
     def _initialize(self, machine_config):
 
-        self.sentencepiece_model_path = os.path.join(machine_config.data_dir, 'preprocessed/word-embedding/bpe_64000_lc_cross_val_8_2015-2019.model')
+        self.sentencepiece_model_path = os.path.join(machine_config.data_dir, 'preprocessed/word-embedding/bpe_64000_lc.model')
         self.critical_mesh_topic_mapping_mapping_path = os.path.join(machine_config.data_dir, 'preprocessed/label-mapping/critical_mesh_topic_mapping_v2.pkl')
         self.unknown_index = 1
         self.padding_index = 0
