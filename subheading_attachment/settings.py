@@ -177,7 +177,7 @@ class _PreprocessingConfig(_ConfigBase):
     def _initialize(self, machine_config):
 
         self.sentencepiece_model_path = os.path.join(machine_config.data_dir, 'preprocessed/word-embedding/bpe_64000_lc.model')
-        self.critical_mesh_topic_mapping_mapping_path = os.path.join(machine_config.data_dir, 'preprocessed/label-mapping/critical_mesh_topic_mapping_v2.pkl')
+        self.label_id_mapping_path = os.path.join(machine_config.data_dir, 'preprocessed/label-mapping/{}_id_mapping.pkl')
         self.unknown_index = 1
         self.padding_index = 0
         self.title_max_words = 64
