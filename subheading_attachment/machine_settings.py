@@ -2,7 +2,7 @@ class _MachineConfig:
     def __init__(self):
 
         root_dir = 'home/****'
-        self.data_dir = '/{}/input-data/subheading-attachment'.format(root_dir)
+        self.data_dir = '/{}/input_data/'.format(root_dir)
         self.database_host = 'localhost'
         self.database_port = 3306
 
@@ -10,7 +10,7 @@ class _MachineConfig:
         self.dev_limit   = 1000000000
         self.test_limit = 1000000000
 
-        self.runs_dir = '/{}/runs/subheading-attachment'.format(root_dir)               
+        self.runs_dir = '/{}/runs'.format(root_dir)               
         self.use_multiprocessing = True
         self.workers = 10
         self.max_queue_size = 10
