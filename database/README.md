@@ -12,5 +12,5 @@ The code requires MEDLINE data to be stored in a MySQL database (v5.6). The data
 
 ## Recreating the database id files
 
-- List of pmids for the train, validation, and test sets are included in ../input_data/pmid_datasets.tar.gz.
-- The code references articles by database primary keys and therefore these lists of pmids need to be converted into lists of database ids. The database ids will be unqiue for your database, but see the files in ../input_data/db_id_datasets.tar.gz for an example.
+- Lists of pmids for the train, validation, and test sets are included in ../input_data/pmid_datasets.tar.gz.
+- The code references articles by database primary keys and so these lists of pmids need to be converted into lists of database ids. The database ids will be unqiue for your database (see the files in ../input_data/db_id_datasets.tar.gz as an example).
