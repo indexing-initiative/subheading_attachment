@@ -20,6 +20,7 @@ This repository contains the code for the paper "Automatic MeSH Indexing: Revisi
 ```
 conda create -n subheading_attachment --file requirements.txt
 conda activate subheading_attachment
+pip install sentencepiece
 python -m subheading_attachment.train --model_type=end_to_end
 python -m subheading_attachment.train --model_type=mainheading
 python -m subheading_attachment.train --model_type=subheading
