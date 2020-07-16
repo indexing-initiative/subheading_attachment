@@ -3,7 +3,7 @@ import os
 import tensorflow.keras.backend as K
 from   tensorflow.keras.callbacks import Callback, CSVLogger, EarlyStopping, ModelCheckpoint, ReduceLROnPlateau, TerminateOnNaN
 from   tensorflow.keras.layers import (Activation, BatchNormalization, Concatenate, Conv1D, Dense, Dropout, Embedding, Flatten, 
-                                       Input, Lambda, Layer, MaxPooling1D)
+                                       Input, Layer, MaxPooling1D)
 from   tensorflow.keras.losses import binary_crossentropy
 import tensorflow.keras.models
 from   tensorflow.keras.optimizers import Adam

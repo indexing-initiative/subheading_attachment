@@ -182,7 +182,7 @@ class _PreprocessingConfig(_ConfigBase):
         self.padding_index = 0
         self.title_max_words = 64
         self.abstract_max_words = 448
-        self.max_labels = 77
+        self.max_labels = 112
         self.num_desc = 29351
         self.num_labels = 122542
         self.vocab_size = 64000
