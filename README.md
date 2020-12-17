@@ -1,27 +1,48 @@
-# Subheading Attachment
+# Subheading Attachment Model Trainer
 
-This repository contains the code for the paper "Automatic MeSH Indexing: Revisiting the Subheading Attachment Problem" by A. R. Rae et al.
+This package trains the subheading attachment models described in "Automatic MeSH Indexing: Revisting the Subheading Attachment Problem" by A. R. Rae et al.
 
-# Setup
+## System Requirements
 
-1. The code reads MEDLINE data from a database. To setup a database follow the instructions in ./database/README.md
+- 64GB RAM (Required)
+- 64GB disk space (Required)
+- NVIDIA 16GB GPU (Required)
+- Multi-core CPU (Recommended) (Tested with 14 CPU cores)
 
-2. Set the root directory and database host in ./subheading_attachment/machine_settings.py
+## Install
 
-3. Set the database user and password in ./subheading_attachment/settings.py
-
-4. Copy the ./input_data folder to your root directory.
-
-5. Create a folder named "runs" in your root directory.
-
-
-# Usage
+1) Create an Anconda environment:
 
 ```
-conda create -n subheading_attachment --file requirements.txt
-conda activate subheading_attachment
-pip install sentencepiece
-python -m subheading_attachment.train --model_type=end_to_end
-python -m subheading_attachment.train --model_type=mainheading
-python -m subheading_attachment.train --model_type=subheading
+conda create -n trainer_env --file requirements.txt
+conda activate trainer_env
+pip install tensorflow-text==2.2.0
+pip install tensorflow-gpu==2.2.0
+pip install tensorflow-serving-api==2.2
 ```
+2) To install from source, run the following command in the package root directory:
+```
+    pip install .
+```
+
+## Train
+
+1) Create a working directory.
+2) Copy all files from from ./input_data to the working directory.
+3) From the working direcory run:
+```
+python -m subheading_attachment_model_trainer.train
+```
+Trained models are saved to the working directory in "end_to_end_model", "main_heading_model", and "subheading_model" folders.
+
+## Test Chained Method
+
+1) Start tensorflow serving using Docker:
+```
+sudo docker run -d -p 8500:8500 -v /path/to/workdir/deploy:/serving/sh-pred/1 tensorflow/serving:2.2.0 --model_name=sh-pred --model_base_path=/serving/sh-pred
+```
+2) From the working directory run:
+```
+python -m subheading_attachment_model_trainer.test
+```
+The script prints the F1 score performance on the test set. It is expected to be about 0.44.
